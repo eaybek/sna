@@ -1,14 +1,14 @@
 import setuptools
+import version
 
 # get version
-with open("version.txt", "r") as vf:
-    version = vf.read().strip()
+version_ = version.VERSION
 # increment minor version
-with open("version.txt", "w") as vf:
-    v = [int(i) for i in version.split(".")]
+with open("version.py", "w") as vf:
+    v = [int(i) for i in version_.split(".")]
     v[2] = v[2] + 1
     new_version = ".".join([str(i) for i in v])
-    vf.write(new_version)
+    vf.write('VERSION = "{}"'.format(new_version))
 
 # get long description
 long_description = ""
