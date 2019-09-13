@@ -21,12 +21,14 @@ long_description += """you can see the code samples\n"""
 
 # get sample usage
 with open("sample.txt", "r") as fh:
+    long_description += """\n```\nsample.txt\n```\n"""
     long_description += """```\n"""
     long_description += fh.read()
     long_description += """\n```"""
 
 # get sample usage
 with open("sample.py", "r") as fh:
+    long_description += """\n```\nsample.py\n```\n"""
     long_description += """\n```python3\n"""
     long_description += fh.read()
     long_description += """\n```\n"""
