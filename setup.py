@@ -1,14 +1,43 @@
 import setuptools
 
+# get version
+with open("version.txt", "r") as vf:
+    version = vf.read().strip()
+# increment minor version
+with open("version.txt", "w") as vf:
+    v = [int(i) for i in version.split(".")]
+    v[2] = v[2] + 1
+    new_version = ".".join(v)
+    vf.write(new_version)
+
+# get long description
+long_description = ""
 with open("README.md", "r") as fh:
-    long_description = fh.read()
+    long_description += fh.read()
+
+
+long_description += """## Sample Usage"""
+long_description += """you can see the code samples"""
+
+# get sample usage
+with open("sample.txt", "r") as fh:
+    long_description += """```"""
+    long_description += fh.read()
+    long_description += """```"""
+
+# get sample usage
+with open("sample.py", "r") as fh:
+    long_description += """```python3"""
+    long_description += fh.read()
+    long_description += """```"""
+
 
 setuptools.setup(
     name="sna",
-    version="0.0.1",
+    version=version,
     author="Erdem Aybek",
     author_email="eaybek@gmail.com",
-    description=" ".join(["Nothing"]),
+    description=" ".join(["Search N Act"]),
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/eaybek/sna",

@@ -2,5 +2,13 @@
 [github](https://github.com/eaybek/sna/)  
 [PyPi](https://pypi.org/project/sna/)  
 
-sna reserved for self usage purpose
+sna means:
+
+Search N Act
+
+you can do 
+search and replace
+search and create
+search and open
+search and anything...
 
