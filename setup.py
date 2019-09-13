@@ -1,11 +1,11 @@
 import setuptools
 
 # get version
-with open("version.py", "r") as vf:
+with open("version", "r") as vf:
     version_ = vf.read()
     version_ = str(version_.split('"')[1])
 # increment minor version
-with open("version.py", "w") as vf:
+with open("version", "w") as vf:
     v = [int(i) for i in version_.split(".")]
     v[2] = v[2] + 1
     new_version = ".".join([str(i) for i in v])
