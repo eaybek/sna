@@ -7,7 +7,7 @@ with open("version.txt", "r") as vf:
 with open("version.txt", "w") as vf:
     v = [int(i) for i in version.split(".")]
     v[2] = v[2] + 1
-    new_version = ".".join(v)
+    new_version = ".".join([str(i) for i in v])
     vf.write(new_version)
 
 # get long description
@@ -16,20 +16,20 @@ with open("README.md", "r") as fh:
     long_description += fh.read()
 
 
-long_description += """## Sample Usage"""
-long_description += """you can see the code samples"""
+long_description += """## Sample Usage\n"""
+long_description += """you can see the code samples\n"""
 
 # get sample usage
 with open("sample.txt", "r") as fh:
-    long_description += """```"""
+    long_description += """```\n"""
     long_description += fh.read()
-    long_description += """```"""
+    long_description += """\n```"""
 
 # get sample usage
 with open("sample.py", "r") as fh:
-    long_description += """```python3"""
+    long_description += """\n```python3\n"""
     long_description += fh.read()
-    long_description += """```"""
+    long_description += """\n```\n"""
 
 
 setuptools.setup(
