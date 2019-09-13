@@ -1,8 +1,9 @@
 import setuptools
-import version
 
 # get version
-version_ = version.VERSION
+with open("version.py", "r") as vf:
+    version_ = vf.read()
+    version_ = str(version_.split('"')[1])
 # increment minor version
 with open("version.py", "w") as vf:
     v = [int(i) for i in version_.split(".")]
@@ -36,7 +37,7 @@ with open("sample.py", "r") as fh:
 
 setuptools.setup(
     name="sna",
-    version=version,
+    version=version_,
     author="Erdem Aybek",
     author_email="eaybek@gmail.com",
     description=" ".join(["Search N Act"]),
