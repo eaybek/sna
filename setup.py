@@ -1,9 +1,8 @@
 import setuptools
+from sna.version import VERSION
 
 # get version
-with open("sna/version", "r") as vf:
-    version_ = vf.read()
-    version_ = str(version_.split('"')[1])
+version_ = VERSION
 # increment minor version
 with open("sna/version", "w") as vf:
     v = [int(i) for i in version_.split(".")]
