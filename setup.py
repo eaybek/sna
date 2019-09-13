@@ -1,11 +1,11 @@
 import setuptools
 
 # get version
-with open("version", "r") as vf:
+with open("sna/version", "r") as vf:
     version_ = vf.read()
     version_ = str(version_.split('"')[1])
 # increment minor version
-with open("version", "w") as vf:
+with open("sna/version", "w") as vf:
     v = [int(i) for i in version_.split(".")]
     v[2] = v[2] + 1
     new_version = ".".join([str(i) for i in v])
@@ -21,14 +21,14 @@ long_description += """## Sample Usage\n"""
 long_description += """you can see the code samples\n"""
 
 # get sample usage
-with open("sample.txt", "r") as fh:
+with open("sna/sample.txt", "r") as fh:
     long_description += """\n```\nsample.txt\n```\n"""
     long_description += """```\n"""
     long_description += fh.read()
     long_description += """\n```"""
 
 # get sample usage
-with open("sample.py", "r") as fh:
+with open("sna/sample.py", "r") as fh:
     long_description += """\n```\nsample.py\n```\n"""
     long_description += """\n```python3\n"""
     long_description += fh.read()
