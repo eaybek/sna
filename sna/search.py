@@ -49,13 +49,17 @@ class Sna(object):
         self.inplace = False
         self.selected_classes = list()
         self.through = None
+        self.default = self.regex
+
+    def __call__(self, *args, **kwargs):
+        return self.default(*args, **kwargs)
 
     def search(self, *args):
         if len(args) == 0:
             self.usable_entities = self.entities.copy()
         else:
             for arg in args:
-                if arg in self.entities:
+                if arg in self.entities.keys():
                     self.usable_entities[
                         arg
                     ] = self.entities[arg]
@@ -63,22 +67,31 @@ class Sna(object):
         through = Search(self)
         return through
 
-    def __call__(self, regex):
+    def regex(self, regex):
+        compilation = re.compile(regex)
+        return self.filter(compilation.match)
+
+    def literal(self, literal):
+        return self.filter(lambda x: x == literal)
+
+    def filter(self, _filterfunc):
         def decorator(cls):
-            compilation = re.compile(regex)
             if cls.__name__ not in self.entities:
                 self.entities[cls.__name__] = list()
 
-            for rule in self.entities[cls.__name__]:
-                if (
-                    compilation == rule[0]
-                    and cls is rule[1]
-                ):
-                    return cls
+            def init(self, match):
+                self.match = match
 
-            self.entities[cls.__name__].append(
-                (compilation, cls)
-            )
+            if type(cls) is not type:
+                cls = type(
+                    cls.__name__,
+                    (),
+                    {"__init__": init, "run": cls},
+                )
+            if (_filterfunc, cls) not in self.entities:
+                self.entities[cls.__name__].append(
+                    (_filterfunc, cls)
+                )
             return cls
 
         return decorator
@@ -91,8 +104,9 @@ class Sna(object):
 
             def parameter_harvester(*args, **kwargs):
                 for cls in self.selected_classes:
-                    func = getattr(cls, key)
-                    func(*args, **kwargs)
+                    if hasattr(cls, key):
+                        func = getattr(cls, key)
+                        func(*args, **kwargs)
                 self.selected_classes = list()
                 self.usable_entities = dict()
 
@@ -102,7 +116,7 @@ class Sna(object):
         self.split_words = args
         return self
 
-    def on(self, string=None, filepath=None):
+    def on(self, stg=None, filepath=None):
         new_file = str()
         if self.split_words is None:
             self.lines()
@@ -112,10 +126,13 @@ class Sna(object):
                 filepath = os.path.abspath(filepath)
                 with open(filepath, "r") as f:
                     content = f.read()
-        elif string is not None and isinstance(
-            string, str
-        ):
-            content = string
+            else:
+                raise Exception(
+                    "string or filepath must be provided"
+                )
+
+        elif stg is not None and isinstance(stg, str):
+            content = stg
         else:
             raise Exception(
                 "string or filepath must be provided"
@@ -123,19 +140,24 @@ class Sna(object):
 
         target = str()
 
+        def process_target(target):
+            for (
+                cls_name,
+                rules,
+            ) in self.usable_entities.items():
+
+                for compilation, cls in rules:
+                    match = compilation(target)
+                    if match is not None:
+                        self.selected_classes.append(
+                            cls(match)
+                        )
+            target = str()
+            return target
+
         for char in content:
             target = target + char
             if char in self.split_words:
-                for (
-                    cls_name,
-                    rules,
-                ) in self.usable_entities.items():
-
-                    for compilation, cls in rules:
-                        match = compilation.match(target)
-                        if match is not None:
-                            self.selected_classes.append(
-                                cls(match)
-                            )
-                target = str()
+                target = process_target(target)
+        target = process_target(target)
         return self

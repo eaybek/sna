@@ -6,7 +6,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="sna",
-    version="0.0.11",
+    version="0.0.12",
     author="Erdem Aybek",
     author_email="eaybek@gmail.com",
     description=" ".join(["Search N Act"]),
